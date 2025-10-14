@@ -1,43 +1,52 @@
 import AVLTree as AVL
-import time
-import tracemalloc
 
 class Infinite_Hotel:
     def __init__ (self, room_count = 0, log_count = 0):
         self.all_room = AVL.AVLTree()
         self.room_count = room_count
         self.log_count = log_count
-        self.log = []
 
     def inputGuest(self, input_guests, method):
-        self.moveGuest(1)
+        self.moveGuest()
         for i in range(input_guests):
-            room_id = 2**i
-            self.all_room.add(room_id, method)
+            room_id = 2*i
+            room = self.search_room_by_id(room_id)
+            if room is None:
+                self.addRoom(room_id, method)
+            else:
+                room.method = method
 
-    def moveGuest(self, step):
+    def moveGuest(self):
         root = self.all_room.root
-        def inorder(root):
+        def reverse_inorder(root):
             if root != None:
-                inorder(root.left)
-                id = root.room_id
-                root.room_id = (2**id) + step
-                inorder(root.right)
-        inorder(root)
-	# // maybe don’t need
+                reverse_inorder(root.right)
+                if root.method != None:
+                    new_id = (root.room_id * 2) + 1
+                    if self.search_room_by_id(new_id) is None:
+                        self.addRoom(new_id)
+                    self.search_room_by_id(new_id).method = root.method
+                    root.method = None
+                reverse_inorder(root.left)
+        reverse_inorder(root)
 
-    def addRoom(self, room_number):
+    def addRoom(self, room_number, method = None):
         room = self.search_room_by_id(room_number)
         if room != None:
-            self.inputGuest(1, room.method)
-            self.all_room.removeRoom(room_number)
-        self.all_room.add(room_number, None)
+            print('This room is already exist!!')
+        else:
+            self.room_count += 1
+            self.all_room.add(room_number, method)
+            self.logging('add', room_number)
 		
     def removeRoom(self, room_number):
         room = self.search_room_by_id(room_number)
         if room != None:
-            self.inputGuest(1, room.method)
+            self.room_count -= 1
             self.all_room.removeRoom(room_number)
+            self.logging('remove', room_number)
+        else:
+            print('This room is not exist!!')
     
     def search_room_by_id(self, room_id):
         room = self.all_room.root
@@ -46,80 +55,25 @@ class Infinite_Hotel:
                 room = room.right
             elif room_id < room.room_id:
                 room = room.left
-            else:
-                break
+            else: break
         return room
 
     def __str__(self):
         root = self.all_room.root
+        lst = []
+        with open("room.csv", "w", encoding="utf-8") as f:
+            f.write("room, transport\n")
         def inorder(root):
             if root != None:
                 inorder(root.left)
-                id = str(root.room_id)
-                print('-'*(len(id)+2) + f'\n|{id}|\n' + '-'*(len(id)+2))
+                lst.append(f'room #{root.room_id}: {root.method if root.method != None else ''}')
+                with open("room.csv", "a", encoding="utf-8") as f:
+                    f.write(f"room #{root.room_id}, {root.method if root.method != None else ''}\n")
                 inorder(root.right)
         inorder(root)
-        return ''
+        return '\n'.join(lst)
 
-    def logging(self, room):
-        # self.log
-        # curr = time.ctime(time.time())
-        # print("Current time:", curr)
-        pass
-# 	// anytime after edited the hotel
-# 	// log as list/linklist
-# 	// logging data include room_id method
-# // time of log
-# 	Move:
-# 		F”{}move person in room:{room[0]} to room{newroom[0]}”
-# 	Remove:
-# i don't know how to do this
-
-
-
-hotel = Infinite_Hotel()
-end_program = False
-while not end_program:
-    print('Welcome to Hilbert Hotel')
-    ins = input('What do you want to do? \n[AG] to add guest\n[AR] to add room\n[RR] to remove room\ntype and enter: ')
-    
-    if ins == 'AG':
-        start = time.time()
-        tracemalloc.start()
-        n, m = input('How many guest and what method that they come [N/Method]: ').split('/')
-        try: 
-            n = int(n)
-            hotel.inputGuest(n, m)
-        except:
-            print('wrong input type!!!')
-    elif ins == 'AR':
-        start = time.time()
-        tracemalloc.start()
-        number = input('Enter room ID: ')
-        try: 
-            number = int(number)
-            hotel.addRoom(number)
-        except:
-            print('wrong input type!!!')
-    else:
-        start = time.time()
-        tracemalloc.start()
-        number = input('Enter room ID: ')
-        try: 
-            number = int(number)
-            hotel.removeRoom(number)
-        except:
-            print('wrong input type!!!')
-            
-    end = time.time()
-    current, peak = tracemalloc.get_traced_memory()
-    tracemalloc.stop()
-    
-    print(f'\nProgram work time = {end - start}')
-    print(f'Program space usage = {current}\n')
-    
-    print(hotel)          
-    if input('Do you want to end program [T/F]: ') == 'T': end_program = True
-        
-
-
+    def logging(self, method, room_id):
+        self.log_count += 1      
+        with open("log.csv", "a", encoding="utf-8") as f:
+            f.write(f"{self.log_count}, {method}, room #{room_id}\n")
