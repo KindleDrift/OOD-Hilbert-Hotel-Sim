@@ -1,9 +1,10 @@
 class AVLTree:
     class AVLNode:
 
-        def __init__(self, room_id, method, left=None, right=None):
+        def __init__(self, room_id, method, method_id, left=None, right=None):
             self.room_id = room_id
             self.method = method
+            self.method_id = method_id
             self.left = None if left is None else left
             self.right = None if right is None else right
             self.height = self.setHeight()
@@ -26,17 +27,17 @@ class AVLTree:
     def __init__(self, root=None):
         self.root = None if root is None else root
 
-    def add(self, room_id, method):
-        self.root = self._add(self.root, room_id, method)
+    def add(self, room_id, method, method_id):
+        self.root = self._add(self.root, room_id, method, method_id)
 
-    def _add(self, root, room_id, method):
+    def _add(self, root, room_id, method, method_id):
         if root is None:
-            return self.AVLNode(room_id, method)
+            return self.AVLNode(room_id, method, method_id)
         else:
             if int(room_id) < int(root.room_id):
-                root.left = self._add(root.left, room_id, method)
+                root.left = self._add(root.left, room_id, method, method_id)
             else:
-                root.right = self._add(root.right, room_id, method)
+                root.right = self._add(root.right, room_id, method, method_id)
         root = self.rebalance(root)
         return root
 
