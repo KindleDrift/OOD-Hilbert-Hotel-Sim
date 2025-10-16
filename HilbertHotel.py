@@ -5,8 +5,6 @@ class Infinite_Hotel:
         self.avl = AVL.AVLTree()
         for num in range(room_count):
             self.avl.add(num + 1, 'init', num + 1)
-        self.room_count = room_count
-        self.log_count = log_count
 
     def inputGuest(self, channel_lst, amount_lst):
         n = len(channel_lst) + 1
@@ -26,7 +24,6 @@ class Infinite_Hotel:
     def addRoom(self, room_number, method = None, method_id = None):
         room = self.search_room_by_id(room_number) if method == None else None
         if room == None:
-            self.room_count += 1
             self.avl.add(room_number, method, method_id)
             return True
         else:
@@ -35,7 +32,6 @@ class Infinite_Hotel:
     def removeRoom(self, room_number):
         room = self.search_room_by_id(room_number)
         if room != None:
-            self.room_count -= 1
             self.avl.removeRoom(room_number)
             return True
         else:
