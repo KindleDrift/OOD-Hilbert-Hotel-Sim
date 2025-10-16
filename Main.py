@@ -6,8 +6,8 @@ print('Welcome to Hilbert Hotel')
 initial = int(input("Enter the initial guest amount : "))
 hotel = HH.Infinite_Hotel(initial)
 
-with open("log.csv", "w", encoding="utf-8") as f:
-        f.write("log, type, room number\n")
+# with open("log.csv", "w", encoding="utf-8") as f:
+#         f.write("log, type, room number\n")
         
 while True:
     print('-------------------------------------------------------------------------------------------')
@@ -63,17 +63,13 @@ while True:
             continue
         room = hotel.search_room_by_id(number)
         if room is None:
-            print('This room is not exist!!!')
+            print("This room doesn't exist!!!")
         else:
             print(f'Room {number}, channel {room.method}({room.method_id})')
     
     elif ins[0] == 'SOR':
-        try: 
-            number = int(ins[1])
-            hotel.addRoom(number)
-        except:
-            print('wrong input type!!!')
-            continue
+        hotel.rooms_to_csv()
+        print('Sort room and export to csv successfully')
     
     elif ins[0] == 'RR':
         try: 
@@ -84,10 +80,11 @@ while True:
         if hotel.removeRoom(number):
             print(f'Remove room {number} succesfully')
         else:
-            print('This room is not exist!!!')
+            print("This room doesn't exist!!!")
             
     elif ins[0] == 'S':
         hotel.rooms_to_csv()
+        print('Export to csv successfully')
             
     else:
         print("That command doesn't exist!!!")
@@ -97,4 +94,5 @@ while True:
     tracemalloc.stop()
         
     print(f'\nProgram work time = {end - start} s')
-    print(f'Program space usage = {peak - current} byte')
+    print(f'Current memory usage = {current / 1024:.2f} KB')
+    print(f'Peak memory usage = {peak / 1024:.2f} KB')
