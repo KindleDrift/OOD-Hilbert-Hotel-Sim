@@ -1,30 +1,34 @@
 import AVLTree as AVL
 
-class Infinite_Hotel:
+class InfiniteHotel:
     def __init__ (self, room_count):
         self.avl = AVL.AVLTree()
         for num in range(room_count):
             self.avl.add(num + 1, 'init', num + 1)
 
+    def calculate_number(self, x, y):
+        return ((x + y) * (x + y + 1) // 2) + y
+
     def input_guest(self, method_lst, amount_lst):
-        n = len(method_lst) + 1
-        self.move_guest(n)
-        for i in range(1, n):
+        i = 1
+        self.move_guest()
+        for method in method_lst:
             for j in range(amount_lst[i - 1]):
-                room_id = (n * j) + i
-                self.add_room(room_id, method_lst[i - 1], j + 1)
+                room_id = self.calculate_number(i, j)
+                self.add_room(room_id, method, j + 1)
+            i += 1
             
-    def move_guest(self, n):
+    def move_guest(self):
         rooms = self.all_rooms()
         self.avl.clear()
         for room in rooms:
-            new_id = n * room.room_id
-            self.avl.add(new_id, room.method, room.method_id)
+            new_id = self.calculate_number(0, room.room_id)
+            self.avl.add(new_id, room.method.replace(' (NEW)', ''), room.method_id)
 
     def add_room(self, room_id, method = None, method_id = None):
         room = self.search_room_by_id(room_id) if method == None else None
         if room == None:
-            self.avl.add(room_id, method, method_id)
+            self.avl.add(room_id, str(method) + ' (NEW)', method_id)
             return True
         else:
             return False
