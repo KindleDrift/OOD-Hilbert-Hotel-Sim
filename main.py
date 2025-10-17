@@ -4,7 +4,7 @@ import Infinite_Hotel as HH
 
 print('Welcome to Hilbert Hotel')
 initial = int(input("Enter the initial guest amount : "))
-hotel = HH.Infinite_Hotel(initial)
+hotel = HH.InfiniteHotel(initial)
         
 while True:
     print('-------------------------------------------------------------------------------------------')
