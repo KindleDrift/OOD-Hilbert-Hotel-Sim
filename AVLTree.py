@@ -39,10 +39,10 @@ class AVLTree:
                 root.left = self._add(root.left, room_id, method, method_id)
             else:
                 root.right = self._add(root.right, room_id, method, method_id)
-        root = self.rebalance(root)
+        root = self.reBalance(root)
         return root
 
-    def rebalance(self, x):
+    def reBalance(self, x):
         if x is None:
             return x
         # x.setHeight()
@@ -98,7 +98,7 @@ class AVLTree:
             temp = self.getMin(node.right)
             node.room_id, node.method = temp.room_id, temp.method
             node.right = self._remove(node.right, temp.room_id)
-        node = self.rebalance(node)
+        node = self.reBalance(node)
         return node
 
     def getMin(self, node):
