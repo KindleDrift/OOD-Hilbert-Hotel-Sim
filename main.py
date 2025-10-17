@@ -5,9 +5,6 @@ import Infinite_Hotel as HH
 print('Welcome to Hilbert Hotel')
 initial = int(input("Enter the initial guest amount : "))
 hotel = HH.Infinite_Hotel(initial)
-
-# with open("log.csv", "w", encoding="utf-8") as f:
-#         f.write("log, type, room room_id\n")
         
 while True:
     print('-------------------------------------------------------------------------------------------')
@@ -42,7 +39,7 @@ while True:
         except:
             print('wrong input type!!!')
             continue
-        hotel.inputGuest(method_list, amount_list)
+        hotel.input_guest(method_list, amount_list)
             
     elif ins[0] == 'AR':
         try: 
@@ -77,7 +74,7 @@ while True:
         except:
             print('wrong input type!!!')
             continue
-        if hotel.removeRoom(room_id):
+        if hotel.remove_room(room_id):
             print(f'Remove room {room_id} succesfully')
         else:
             print("This room doesn't exist!!!")
