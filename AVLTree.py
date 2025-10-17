@@ -10,17 +10,17 @@ class AVLTree:
             self.height = -1
 
 
-        def setHeight(self):
-            a = self.getHeight(self.left)
-            b = self.getHeight(self.right)
+        def set_height(self):
+            a = self.get_height(self.left)
+            b = self.get_height(self.right)
             self.height = 1 + max(a, b)
             return self.height
 
-        def getHeight(self, node):
+        def get_height(self, node):
             return -1 if node is None else node.height
 
-        def balanceValue(self):
-            return self.getHeight(self.left) - self.getHeight(self.right)
+        def balance_value(self):
+            return self.get_height(self.left) - self.get_height(self.right)
 
     def __init__(self, root=None):
         self.root = None if root is None else root
@@ -39,44 +39,44 @@ class AVLTree:
                 root.left = self._add(root.left, room_id, method, method_id)
             else:
                 root.right = self._add(root.right, room_id, method, method_id)
-        root = self.reBalance(root)
+        root = self.rebalance(root)
         return root
 
-    def reBalance(self, x):
+    def rebalance(self, x):
         if x is None:
             return x
         # x.setHeight()
-        balance = x.balanceValue()
+        balance = x.balance_value()
         if balance == -2:
-            if x.right.balanceValue() == 1:
-                x.right = self.rotateLeftChild(x.right)
-            x = self.rotateRightChild(x)
+            if x.right.balance_value() == 1:
+                x.right = self.rotate_left_child(x.right)
+            x = self.rotate_right_child(x)
         elif balance == 2:
-            if x.left.balanceValue() == -1:
-                x.left = self.rotateRightChild(x.left)
-            x = self.rotateLeftChild(x)
-        x.setHeight()
+            if x.left.balance_value() == -1:
+                x.left = self.rotate_right_child(x.left)
+            x = self.rotate_left_child(x)
+        x.set_height()
         return x
 
-    def rotateLeftChild(self, root):
+    def rotate_left_child(self, root):
         y = root.left
         root.left = y.right
         y.right = root
         
-        y.setHeight()
-        root.setHeight()
+        y.set_height()
+        root.set_height()
         return y
 
-    def rotateRightChild(self, root):
+    def rotate_right_child(self, root):
         y = root.right
         root.right = y.left
         y.left = root
         
-        y.setHeight()
-        root.setHeight()
+        y.set_height()
+        root.set_height()
         return y
 
-    def removeRoom(self, room_id):
+    def remove_room(self, room_id):
         self.root = self._remove(self.root, room_id)
 
     def _remove(self, node, room_id):
@@ -95,13 +95,13 @@ class AVLTree:
                 temp = node.left
                 root = None
                 return temp
-            temp = self.getMin(node.right)
+            temp = self.get_min(node.right)
             node.room_id, node.method = temp.room_id, temp.method
             node.right = self._remove(node.right, temp.room_id)
-        node = self.reBalance(node)
+        node = self.rebalance(node)
         return node
 
-    def getMin(self, node):
+    def get_min(self, node):
         current = node
         while current.left:
             current = current.left
