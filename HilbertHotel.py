@@ -1,7 +1,7 @@
 import AVLTree as AVL
 
 class Infinite_Hotel:
-    def __init__ (self, room_count, log_count = 0):
+    def __init__ (self, room_count):
         self.avl = AVL.AVLTree()
         for num in range(room_count):
             self.avl.add(num + 1, 'init', num + 1)
